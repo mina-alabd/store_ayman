@@ -4,11 +4,11 @@
       "appName": "واتساب",
       "androidPackageName": "com.mon",
       "latestVersionCode": "1.9.25",
-      "appShortDescription": "RV Manager is an all-in-one solution for downloading, installing, and managing RV apps and other modded APKs, offering a safe, reliable, and user-friendly experience.",
+      "appShortDescription": "واتساب الذهبي",
       "requireMicroG": false,
       "latestVersionUrl": "https://github.com/rvapps/rv.net/releases/download/2024-18/rv.net_rv_manager_v1.9.25.apk",
       "icon": "https://rv.net/assets/img/apps/thumbs/com.rv.net.rvmanager.64.webp",
       "index": 0
     }
   ]
-}
+} 

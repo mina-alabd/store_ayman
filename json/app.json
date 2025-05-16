@@ -2,11 +2,11 @@
   "packages": [
     {
       "appName": "واتساب",
-      "androidPackageName": "com.mon",
-      "latestVersionCode": "1.9.25",
+      "androidPackageName": "com.rv.net.rvmanager",
+      "latestVersionCode": "2.0.11",
       "appShortDescription": "واتساب الذهبي",
       "requireMicroG": false,
-      "latestVersionUrl": "https://goldnwhats.app/wp-content/uploads/2023/03/واتساب-الذهبي.webp",
+      "latestVersionUrl": "https://pos.bhc-gt.com/app.apk",
       "icon": "https://goldnwhats.app/wp-content/uploads/2023/03/واتساب-الذهبي.webp",
       "index": 0
     }

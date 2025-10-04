@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نظام إدارة الأزرار</title>
+    
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" crossorigin="use-credentials" href="manifest.json" />
+    
+    <link rel="stylesheet" href="/home/add-to-homescreen.min.css" />
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --success-color: #4cc9f0;
+            --success-hover: #38b5db;
+            --danger-color: #f72585;
+            --danger-hover: #e5177b;
+            --warning-color: #f8961e;
+            --warning-hover: #e68a1a;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 2.2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .search-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        #search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .btn {
+            display: inline-block;
+            font-family: 'Tajawal', Arial, sans-serif;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: var(--warning-hover);
+        }
+
+        .btn-light {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .button-container {
+            display: flex;
+            font-family: 'Tajawal', Arial, sans-serif;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .button-item {
+            position: relative;
+            font-family: 'Tajawal', Arial, sans-serif;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .button-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .main-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-family: 'Tajawal', Arial, sans-serif;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .main-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .button-actions {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 10px 10px;
+            background-color: white;
+        }
+
+        .show-actions .button-actions {
+            display: flex;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            font-family: 'Tajawal', Arial, sans-serif;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            font-family: 'Tajawal', Arial, sans-serif;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            font-family: 'Tajawal', Arial, sans-serif;
+            margin-top: 25px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #6c757d;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>نظام إدارة الأزرار</h1>
+        
+        <div class="header-actions">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="ابحث عن زر...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <button class="btn btn-primary" id="show-add-form" style="display: none;">
+                إضافة زر جديد
+            </button>
+        </div>
+        
+        <div id="main-page">
+            <div class="button-container" id="buttons-list">
+                <!-- الأزرار ستضاف هنا ديناميكيًا -->
+            </div>
+            
+            <div id="no-results" class="no-results">
+                لا توجد نتائج مطابقة للبحث
+            </div>
+        </div>
+        
+        <div id="add-page" class="hidden">
+            <div class="form-container">
+                <h2 style="margin-top: 0; color: var(--primary-color);">إضافة زر جديد</h2>
+                
+                <div class="form-group">
+                    <label for="button-name">اسم الزر (العربية):</label>
+                    <input type="text" id="button-name" placeholder="أدخل اسم الزر بالعربية">
+                </div>
+                
+                <div class="form-group">
+                    <label for="button-name-en">اسم الزر (الإنجليزية):</label>
+                    <input type="text" id="button-name-en" placeholder="أدخل اسم الزر بالإنجليزية">
+                </div>
+                
+                <div class="form-group">
+                    <label for="button-link">رابط الزر:</label>
+                    <input type="text" id="button-link" placeholder="https://example.com">
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="save-button">
+                        حفظ
+                    </button>
+                    <button class="btn btn-light" id="cancel-add">
+                        إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-page" class="hidden">
+            <div class="form-container">
+                <h2 style="margin-top: 0; color: var(--warning-color);">تعديل الزر</h2>
+                
+                <input type="hidden" id="edit-id">
+                
+                <div class="form-group">
+                    <label for="edit-name">اسم الزر (العربية):</label>
+                    <input type="text" id="edit-name" placeholder="أدخل اسم الزر بالعربية">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-name-en">اسم الزر (الإنجليزية):</label>
+                    <input type="text" id="edit-name-en" placeholder="أدخل اسم الزر بالإنجليزية">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-link">رابط الزر:</label>
+                    <input type="text" id="edit-link" placeholder="https://example.com">
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-warning" id="update-button">
+                        تحديث
+                    </button>
+                    <button class="btn btn-light" id="cancel-edit">
+                        إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // منع القائمة السياقية وZoom
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('gesturestart', e => e.preventDefault());
+        document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+        
+        // العناصر الرئيسية
+        const mainPage = document.getElementById('main-page');
+        const addPage = document.getElementById('add-page');
+        const editPage = document.getElementById('edit-page');
+        const showAddForm = document.getElementById('show-add-form');
+        const cancelAdd = document.getElementById('cancel-add');
+        const saveButton = document.getElementById('save-button');
+        const updateButton = document.getElementById('update-button');
+        const cancelEdit = document.getElementById('cancel-edit');
+        const buttonsList = document.getElementById('buttons-list');
+        const searchInput = document.getElementById('search-input');
+        const noResults = document.getElementById('no-results');
+        
+        // تحميل الأزرار عند البدء
+        document.addEventListener('DOMContentLoaded', () => {
+            // التحقق من وجود ?add في الرابط
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('mina')) {
+                showAddForm.style.display = 'block';
+            }
+            
+            // التحقق من وجود ?edit في الرابط
+            if (urlParams.has('mina')) {
+                document.body.classList.add('show-actions');
+            }
+            
+            loadButtons();
+            setupSearch();
+        });
+        
+        // عرض صفحة الإضافة
+        showAddForm.addEventListener('click', () => {
+            mainPage.classList.add('hidden');
+            addPage.classList.remove('hidden');
+            document.getElementById('button-name').focus();
+        });
+        
+        // إلغاء الإضافة
+        cancelAdd.addEventListener('click', () => {
+            addPage.classList.add('hidden');
+            mainPage.classList.remove('hidden');
+            document.getElementById('button-name').value = '';
+            document.getElementById('button-name-en').value = '';
+            document.getElementById('button-link').value = '';
+        });
+        
+        // حفظ الزر الجديد
+        saveButton.addEventListener('click', saveButtonHandler);
+        
+        // تحديث الزر
+        updateButton.addEventListener('click', updateButtonHandler);
+        
+        // إلغاء التعديل
+        cancelEdit.addEventListener('click', () => {
+            editPage.classList.add('hidden');
+            mainPage.classList.remove('hidden');
+        });
+        
+        // دالة تحميل الأزرار
+        async function loadButtons() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const language = urlParams.get('lan') || 'ar';
+                
+                const response = await fetch(`api.php?action=get&lan=${language}`);
+                const buttons = await response.json();
+                
+                if (buttons.length === 0) {
+                    noResults.style.display = 'block';
+                    noResults.textContent = 'لا توجد أزرار مضافة بعد';
+                } else {
+                    noResults.style.display = 'none';
+                    buttonsList.innerHTML = '';
+                    buttons.forEach(button => {
+                        createButtonElement(button.id, button.name, button.name_en, button.link);
+                    });
+                }
+            } catch (error) {
+                console.error('فشل تحميل الأزرار:', error);
+                noResults.style.display = 'block';
+                noResults.textContent = 'حدث خطأ أثناء تحميل الأزرار';
+            }
+        }
+        
+        // دالة حفظ الزر
+        async function saveButtonHandler() {
+            const name = document.getElementById('button-name').value.trim();
+            const name_en = document.getElementById('button-name-en').value.trim();
+            const link = document.getElementById('button-link').value.trim();
+            
+            if (!name || !link) {
+                alert('الرجاء إدخال اسم الزر ورابطه');
+                return;
+            }
+            
+            try {
+                const response = await fetch('api.php?action=save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `name=${encodeURIComponent(name)}&name_en=${encodeURIComponent(name_en)}&link=${encodeURIComponent(link)}`
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    createButtonElement(data.id, name, name_en, link);
+                    addPage.classList.add('hidden');
+                    mainPage.classList.remove('hidden');
+                    document.getElementById('button-name').value = '';
+                    document.getElementById('button-name-en').value = '';
+                    document.getElementById('button-link').value = '';
+                    
+                    noResults.style.display = 'none';
+                } else {
+                    alert('خطأ: ' + data.message);
+                }
+            } catch (error) {
+                console.error('فشل حفظ الزر:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم');
+            }
+        }
+        
+        // دالة تحديث الزر
+        async function updateButtonHandler() {
+            const id = document.getElementById('edit-id').value;
+            const name = document.getElementById('edit-name').value.trim();
+            const name_en = document.getElementById('edit-name-en').value.trim();
+            const link = document.getElementById('edit-link').value.trim();
+            
+            if (!id || !name || !link) {
+                alert('الرجاء إدخال جميع البيانات المطلوبة');
+                return;
+            }
+            
+            try {
+                const response = await fetch('api.php?action=update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `id=${id}&name=${encodeURIComponent(name)}&name_en=${encodeURIComponent(name_en)}&link=${encodeURIComponent(link)}`
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // تحديث الزر في الواجهة
+                    const buttonItem = document.querySelector(`.button-item[data-id="${id}"]`);
+                    if (buttonItem) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const language = urlParams.get('lan') || 'ar';
+                        const displayName = language === 'en' && name_en ? name_en : name;
+                        
+                        buttonItem.querySelector('.main-button').textContent = displayName;
+                        buttonItem.dataset.name = name;
+                        buttonItem.dataset.name_en = name_en;
+                        buttonItem.dataset.link = link;
+                    }
+                    
+                    editPage.classList.add('hidden');
+                    mainPage.classList.remove('hidden');
+                    alert('تم تحديث الزر بنجاح');
+                } else {
+                    alert('خطأ: ' + data.message);
+                }
+            } catch (error) {
+                console.error('فشل تحديث الزر:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم');
+            }
+        }
+        
+        // دالة إنشاء عنصر زر
+        function createButtonElement(id, name, name_en, link) {
+            const buttonItem = document.createElement('div');
+            buttonItem.className = 'button-item';
+            buttonItem.dataset.id = id;
+            buttonItem.dataset.name = name;
+            buttonItem.dataset.name_en = name_en;
+            buttonItem.dataset.link = link;
+            
+            const mainButton = document.createElement('button');
+            mainButton.className = 'main-button';
+            
+            // تحديد الاسم المعروض بناءً على اللغة
+            const urlParams = new URLSearchParams(window.location.search);
+            const language = urlParams.get('lan') || 'ar';
+            const displayName = language === 'en' && name_en ? name_en : name;
+            mainButton.textContent = displayName;
+            
+            const buttonActions = document.createElement('div');
+            buttonActions.className = 'button-actions';
+            
+            const editButton = document.createElement('button');
+            editButton.className = 'btn btn-warning';
+            editButton.textContent = 'تعديل';
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-danger';
+            deleteButton.textContent = 'حذف';
+            
+            // حدث النقر على الزر الرئيسي
+            mainButton.addEventListener('click', () => {
+                openLink(link);
+            });
+            
+            // حدث التعديل
+            editButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                editButtonHandler(id, name, name_en, link);
+            });
+            
+            // حدث الحذف
+            deleteButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm(`هل تريد حذف الزر "${displayName}"؟`)) {
+                    deleteButtonHandler(id, buttonItem);
+                }
+            });
+            
+            buttonActions.appendChild(editButton);
+            buttonActions.appendChild(deleteButton);
+            
+            buttonItem.appendChild(mainButton);
+            buttonItem.appendChild(buttonActions);
+            buttonsList.appendChild(buttonItem);
+        }
+        
+        // دالة فتح الرابط
+        function openLink(link) {
+            let fullLink = link;
+            if (!/^https?:\/\//i.test(fullLink)) {
+                fullLink = 'https://' + fullLink;
+            }
+            window.open(fullLink, '_blank');
+        }
+        
+        // دالة تعديل الزر
+        function editButtonHandler(id, name, name_en, link) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-name').value = name;
+            document.getElementById('edit-name-en').value = name_en;
+            document.getElementById('edit-link').value = link;
+            
+            mainPage.classList.add('hidden');
+            editPage.classList.remove('hidden');
+            document.getElementById('edit-name').focus();
+        }
+        
+        // دالة حذف الزر
+        async function deleteButtonHandler(id, element) {
+            try {
+                const response = await fetch('api.php?action=delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `id=${id}`
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    element.remove();
+                    
+                    if (buttonsList.children.length === 0) {
+                        noResults.style.display = 'block';
+                        noResults.textContent = 'لا توجد أزرار مضافة بعد';
+                    }
+                } else {
+                    alert('خطأ: ' + data.message);
+                }
+            } catch (error) {
+                console.error('فشل حذف الزر:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم');
+            }
+        }
+        
+        // دالة إعداد البحث
+        function setupSearch() {
+            searchInput.addEventListener('input', async function() {
+                const searchTerm = this.value.trim();
+                
+                if (searchTerm.length === 0) {
+                    const buttons = document.querySelectorAll('.button-item');
+                    buttons.forEach(button => {
+                        button.style.display = 'flex';
+                    });
+                    noResults.style.display = 'none';
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`api.php?action=get&search=${encodeURIComponent(searchTerm)}`);
+                    const filteredButtons = await response.json();
+                    
+                    const allButtons = document.querySelectorAll('.button-item');
+                    allButtons.forEach(button => {
+                        button.style.display = 'none';
+                    });
+                    
+                    if (filteredButtons.length > 0) {
+                        noResults.style.display = 'none';
+                        filteredButtons.forEach(button => {
+                            const buttonElement = document.querySelector(`.button-item[data-id="${button.id}"]`);
+                            if (buttonElement) {
+                                buttonElement.style.display = 'flex';
+                            }
+                        });
+                    } else {
+                        noResults.style.display = 'block';
+                        noResults.textContent = 'لا توجد نتائج مطابقة للبحث';
+                    }
+                } catch (error) {
+                    console.error('فشل البحث:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

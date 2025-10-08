@@ -1,7 +1,16 @@
 {
-  "version": "10.11",
-  "changelog": "تحديث جديد متوفرا يُرجى تحديث التطبيق لمتابعة استخدامه.\n\n- الجديد في هذا الإصدار:\n   - تحسينات في الأداء.\n   - إصلاحات للأخطاء.\n   - ميزات جديدة مُضافة.\n   - تغييرات طفيفة أخرى.\n\nشكراً لاستخدامك تطبيقنا.",
-  "download_url": "https://example.com/app.apk",
-  "force_update": false
+  "showDialog": true,
+  "appVersionCode": 1,
+  "messageText": "تحديث جديد متوفرا يُرجى تحديث التطبيق لمتابعة استخدامه.\n\n- الجديد في هذا الإصدار:\n   - تحسينات في الأداء.\n   - إصلاحات للأخطاء.\n   - ميزات جديدة مُضافة.\n   - تغييرات طفيفة أخرى.\n\nشكراً لاستخدامك تطبيقنا",
+  "updateButtonText": "Update",
+  "updateButtonLink": "https://google.com",
+  "updateButtonGradientStartColor": "#1E88E5",
+  "updateButtonGradientEndColor": "#64B5F6",
+  "cancelButtonText": "Cancel",
+  "cancelClosesApp": true,
+  "cancelButtonGradientStartColor": "#1E88E5",
+  "cancelButtonGradientEndColor": "#64B5F6",
+  "textGradientStartColor": "#1E88E5",
+  "textGradientEndColor": "#64B5F6",
+  "dialogBackgroundColor": "#FFFFFF"
 }
-
